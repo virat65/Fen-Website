@@ -7,7 +7,15 @@ import { toast } from "react-toastify";
 const Navbar = () => {
   const navigate = useNavigate();
   const [options, setOptions] = useState(false);
-  const getusercookie = cookies.get("userinfo");
+ const getusercookie = cookies.get("userinfo");
+ let availableCookie = null;
+ if (getusercookie) {
+   try {
+     availableCookie = JSON.parse(getusercookie);
+   } catch (err) {
+     console.error("Invalid cookie data", err);
+   }
+ }
   const handlLogout = () => {
     cookies.remove("userinfo", { path: "/" });
     toast.success("user logout successfully");
@@ -17,7 +25,7 @@ const Navbar = () => {
       autoClose: 1000,
     });
   };
-  const availableCookie = getusercookie ? JSON.parse(getusercookie) : null;
+
   console.log(availableCookie, "availableCookie");
   return (
     <div className="hero_area">

@@ -1,35 +1,32 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import cookies from "js-cookie";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+
 const MyProfile = () => {
   const navigate = useNavigate();
 
-  // Get user from cookie
   const userCookie = cookies.get("userinfo");
-  const user = userCookie ? JSON.parse(userCookie) : null;
-console.log(user,"usererrr")
-const imageLocatino = `http://localhost:1111/images/${user?.photo}`
-console.log(imageLocatino,"imageLocatino")
-  // const handleLogout = () => {
-  //   cookies.remove("userinfo", { path: "/" });
+  let user = null;
+  if (userCookie) {
+    try {
+      user = JSON.parse(userCookie);
+      console.log(user,"userrr")
+    } catch (err) {
+      console.error("Invalid cookie data", err);
+    }
+  }
 
-  //   toast.success("User logged out successfully", {
-  //     autoClose: 1000,
-  //     onClose: () => navigate("/login"),
-  //   });
-  // };
-const handleLogout = () => {
-  cookies.remove("userinfo", { path: "/" });
-  toast.success("user logout successfully");
-  toast.success("User logged out successfully", {
-    onClose: () => navigate("/"),
+  const imageLocatino = `http://localhost:1111/images/${user?.photo}`;
 
-    autoClose: 1000,
-  });
-};
-  // If user not logged in
+  const handleLogout = () => {
+    cookies.remove("userinfo", { path: "/" });
+    toast.success("User logged out successfully", {
+      onClose: () => navigate("/"),
+      autoClose: 1000,
+    });
+  };
+
   if (!user) {
     return (
       <div className="container text-center mt-5">
@@ -61,25 +58,33 @@ const handleLogout = () => {
           <h4>{user.name}</h4>
           <p className="text-muted">{user.email}</p>
         </div>
-
         <hr />
-
         <div className="mb-2">
           <strong>Phone:</strong>
           <p>{user.phone}</p>
         </div>
-
         <div className="mb-3">
           <strong>User ID:</strong>
           <p>{user._id || "N/A"}</p>
         </div>
-
-        <button className="btn btn-danger w-100" onClick={handleLogout}>
-          Logout
+        <button
+          className="btn btn-primary w-100 mt-2"
+          onClick={() => navigate(`/updateuser/${user._id}`)}
+        >
+          Update Profile
         </button>
         <Link className="btn btn-success w-100 mt-2" to="/">
           Back to Home
         </Link>
+        <button className="btn btn-warning w-100 mt-2" onClick={handleLogout}>
+          Logout
+        </button>
+        <button
+          className="btn btn-danger w-100 mt-2"
+          onClick={() => navigate(`/deleteuserbyId/${user._id}`)}
+        >
+          Delete Account?
+        </button>
       </div>
     </div>
   );

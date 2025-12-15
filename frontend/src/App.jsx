@@ -12,6 +12,7 @@ import Findalluser from "./pages/Findalluser.jsx";
 import Userview from "./pages/userview.jsx";
 import Userdelete from "./pages/Userdelete.jsx";
 import { ToastContainer } from "react-toastify";
+import Updateuser from "./pages/Updateuser.jsx";
 const App = () => {
   return (
     <div>
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/findallusers" element={<Findalluser />} />
           <Route path="/userview/:id" element={<Userview />} />
           <Route path="/deleteuserbyId/:id" element={<Userdelete />} />
+          <Route path="/updateuser/:id" element={<Updateuser />} />
         </Routes>
         <ToastContainer />
       </BrowserRouter>

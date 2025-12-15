@@ -59,7 +59,11 @@ const Findalluser = () => {
             }}
           />
         </div>
-        <Link className="btn btn-success  "  style={{width:"190px",height:"40px"}} to="/">
+        <Link
+          className="btn btn-success  "
+          style={{ width: "190px", height: "40px" }}
+          to="/"
+        >
           Back to Home
         </Link>
       </div>
@@ -81,6 +85,9 @@ const Findalluser = () => {
               </th>
               <th style={{ padding: "10px", border: "1px solid #ddd" }}>
                 Email
+              </th>
+              <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                Role
               </th>
               <th style={{ padding: "10px", border: "1px solid #ddd" }}>
                 Photo
@@ -112,6 +119,9 @@ const Findalluser = () => {
                   </td>
                   <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                     {user.email}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                    {user.role}
                   </td>
                   <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                     {user.photo ? (

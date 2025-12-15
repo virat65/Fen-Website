@@ -1,15 +1,32 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import backendapi from "../backendRouting/userRouting";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import cookie from "js-cookie";
 
 const Userdelete = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  // Get user cookie
+  const getusercookie = cookie.get("userinfo");
+
+  // Redirect to login if cookie is missing or invalid
+  useEffect(() => {
+    if (!getusercookie) {
+      navigate("/login");
+    } else {
+      try {
+        JSON.parse(getusercookie);
+      } catch (err) {
+        navigate("/login");
+      }
+    }
+  }, [getusercookie, navigate]);
+
   const handleCancel = () => {
-    navigate("/findallusers"); // Go back
+    navigate("/findallusers");
   };
 
   const handleDelete = async () => {
@@ -18,15 +35,27 @@ const Userdelete = () => {
         `${backendapi.deleteuserbyid.url}/${id}`
       );
       toast.success(deleteduser.data.message);
-      console.log(deleteduser.data.message)
+
+      // Check if the deleted user is the logged-in user
+      const loggedUser = getusercookie ? JSON.parse(getusercookie) : null;
+      if (loggedUser && loggedUser._id === id) {
+        cookie.remove("userinfo", { path: "/" });
+        navigate("/login"); // redirect immediately
+        return;
+      }
+
+      // Otherwise, redirect to users list
       setTimeout(() => {
         navigate("/findallusers");
       }, 1000);
     } catch (error) {
-      console.log(`Error occurred in userdelete handleDelete: ${error}`);
+      console.error(`Error in handleDelete: ${error}`);
       toast.error("Failed to delete user");
     }
   };
+
+  // Don't render if cookie is missing
+  if (!getusercookie) return null;
 
   return (
     <div

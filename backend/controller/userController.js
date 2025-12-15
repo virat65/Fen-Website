@@ -15,13 +15,12 @@ export const signup = async (req, res) => {
         message: "user already Exists",
       });
     } else {
-
-      console.log(req.files,"req filessssssssss")
-      if(req.files){
-        const image  = req.files.photo
-        console.log(image,"imageeee")
-        if(image){
-          req.body.photo =  imageUpload(image)
+      console.log(req.files, "req filessssssssss");
+      if (req.files) {
+        const image = req.files.photo;
+        console.log(image, "imageeee");
+        if (image) {
+          req.body.photo = imageUpload(image);
         }
       }
       const saltround = 10;
@@ -29,7 +28,7 @@ export const signup = async (req, res) => {
       const user = await userModel.create({
         ...req.body,
         password: encryptPassword,
-        photo:req.body.photo
+        photo: req.body.photo,
       });
       const tokenCall = await tokenGen(user._id);
       console.log(tokenCall, "tokenCalllllllllllllllll");
@@ -62,14 +61,17 @@ export const login = async (req, res) => {
         body: {},
       });
     } else {
-      const passwordMatch =await bcrypt.compare(req.body.password, user.password);
+      const passwordMatch = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
       if (passwordMatch) {
         const tokenCall = await tokenGen(user._id);
 
         console.log(tokenCall, "tokenCalllllllllllllllllllllxl");
         user.token = tokenCall.createdToken;
         user.logintime = tokenCall.verifyToken.iat;
-        user.save()
+        user.save();
         return res.json({
           message: "user logedIn succesfully",
           status: 200,
@@ -197,6 +199,7 @@ export const updateuserdetails = async (req, res) => {
       new: true,
     });
     if (updateData) {
+      console.log(updateData, "updatedata");
       return res.json({
         message: "user updated succesfully",
         body: updateduser,

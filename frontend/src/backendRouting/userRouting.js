@@ -21,5 +21,9 @@ const backendapi = {
     url: `${backendpath}/user/deleteuserbyId`,
     method: "delete",
   },
+  updateuser: {
+    url: `${backendpath}/user/updateuserdetails`,
+    method: "put",
+  },
 };
 export default backendapi;
